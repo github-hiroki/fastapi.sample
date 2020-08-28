@@ -18,5 +18,5 @@
 ## 動作確認
 
 ~~~console
-# curl http://192.168.33.10/index
+# curl http://192.168.33.10/
 ~~~
