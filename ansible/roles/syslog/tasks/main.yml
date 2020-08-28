@@ -1,0 +1,11 @@
+---
+- name: install rsyslog
+  yum:
+    name: rsyslog
+    state: present
+
+- name: start rsyslog service
+  systemd:
+    name: rsyslog
+    state: started
+    enabled: yes

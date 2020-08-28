@@ -1,0 +1,14 @@
+---
+- name: playbook_for_vagrant
+  hosts: vagrant
+  become: yes
+
+  roles:
+    - role: common
+      tags: common
+    - role: selinux
+      tags: selinux
+    - role: firewalld
+      tags: firewalld
+    - role: syslog
+      tags: syslog

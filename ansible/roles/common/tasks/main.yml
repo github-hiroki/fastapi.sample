@@ -1,0 +1,46 @@
+---
+# 日本語の環境を設定
+- name: install glibc-common
+  yum:
+    name: glibc-common
+    state: latest
+
+- name: check if ja_JP in locales list
+  command: localectl list-locales
+  register: check_result
+  changed_when: false
+
+- name: reinstall glibc-common
+  command:
+    cmd: yum reinstall -y glibc-common
+    warn: false
+  when:
+    - "not 'ja_JP' in check_result.stdout"
+
+- name: set locale
+  shell: localectl set-locale LANG=ja_JP.utf8
+  changed_when: false
+
+- name: set timezone to Asia/Tokyo
+  timezone:
+    name: Asia/Tokyo
+
+# 最低限のパッケージのみインストール
+- name: common package
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop:
+    - gzip
+    - unzip
+    - lsof
+    - tar
+    - ntp
+    - crontabs
+
+# NTPサービス起動
+- name: start ntpd service
+  systemd:
+    name: ntpd
+    state: started
+    enabled: yes

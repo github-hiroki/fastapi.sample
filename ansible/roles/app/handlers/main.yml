@@ -1,0 +1,12 @@
+---
+# fastapi-app をリスタート
+- name: restart fastapi-app service
+  systemd:
+    name: fastapi-app
+    state: restarted
+
+# nginx をリスタート
+- name: restart nginx service
+  systemd:
+    name: nginx
+    state: restarted

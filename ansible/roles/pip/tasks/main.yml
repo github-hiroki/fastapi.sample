@@ -1,0 +1,21 @@
+---
+- name: download get-pip.py
+  get_url:
+    url: https://bootstrap.pypa.io/get-pip.py
+    dest: /usr/local/src/get-pip.py
+    validate_certs: no
+
+- name: get installed pip version
+  command: pip --version
+  register: check_result
+  ignore_errors: yes
+  changed_when: false
+
+- name: install pip
+  command: python /usr/local/src/get-pip.py
+  when: check_result is failed
+
+- name: upgrade pip
+  pip:
+    name: pip
+    state: latest

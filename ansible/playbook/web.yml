@@ -1,0 +1,14 @@
+---
+- name: playbook_for_web
+  hosts: web
+  become: yes
+
+  roles:
+    - role: pip
+      tags: pip
+    - role: pyenv
+      tags: pyenv
+    - role: pipenv
+      tags: pipenv
+    - role: app
+      tags: app

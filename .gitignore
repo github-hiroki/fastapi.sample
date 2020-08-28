@@ -1,0 +1,6 @@
+.DS_Store
+.vagrant
+ansible.dev.log
+ansible.prd.log
+ssh.cfg
+Pipfile.lock

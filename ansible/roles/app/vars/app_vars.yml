@@ -1,0 +1,4 @@
+---
+app_root: /opt/fastapi-app
+
+app_python_version: 3.8.5

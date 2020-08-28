@@ -1,0 +1,38 @@
+---
+- name: include vars for pyenv
+  include_vars: pyenv_vars.yml
+
+- name: install required packages for pyenv
+  yum:
+    name: "{{ item }}"
+    state: present
+  loop: "{{ pyenv_required_package }}"
+
+- name: git clone pyenv
+  git:
+    dest: "{{ pyenv_root }}"
+    repo: https://github.com/pyenv/pyenv.git
+
+- name: create versions directory for pyenv
+  file:
+    path: "{{ pyenv_root }}/versions"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: create shims directory
+  file:
+    path: "{{ pyenv_root }}/shims"
+    state: directory
+    owner: root
+    group: root
+    mode: "0777"
+
+- name: set /etc/profile.d/pyenv.sh
+  template:
+    src: pyenv.sh.j2
+    dest: /etc/profile.d/pyenv.sh
+    owner: root
+    group: root
+    mode: "0644"

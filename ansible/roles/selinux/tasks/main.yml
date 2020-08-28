@@ -1,0 +1,15 @@
+---
+- name: install selinux tools
+  yum:
+    name: libselinux-python
+    state: present
+
+- name: disable selinux
+  selinux:
+    state: disabled
+  register: disable_selinux
+
+- name: reboot
+  reboot:
+    reboot_timeout: 3600
+  when: disable_selinux.changed

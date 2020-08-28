@@ -1,0 +1,8 @@
+[Unit]
+Description=FastAPI App Socket
+
+[Socket]
+ListenStream=/run/fastapi-app.sock
+
+[Install]
+WantedBy=sockets.target

@@ -1,0 +1,6 @@
+---
+# 開発環境のみ
+- import_playbook: playbook/vagrant.yml
+
+# 全環境
+- import_playbook: playbook/web.yml

@@ -1,0 +1,13 @@
+---
+# nginx をインストール
+- include_tasks: set_nginx.yml
+
+# app をインストール
+- include_tasks: set_app.yml
+
+# nginx を起動
+- name: start nginx service
+  systemd:
+    name: nginx
+    state: started
+    enabled: yes

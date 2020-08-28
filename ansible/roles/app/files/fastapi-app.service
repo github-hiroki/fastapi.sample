@@ -1,0 +1,18 @@
+[Unit]
+Description=FastAPI App Service
+Requires=fastapi-app.socket
+After=network.target
+
+[Service]
+PIDFile=/run/fastapi-app.pid
+User=root
+Group=root
+RuntimeDirectory=gunicorn
+WorkingDirectory=/opt/fastapi-app
+ExecStart=/usr/bin/pipenv run gunicorn --pid /run/fastapi-app.pid main:app --config guniconfig.py
+ExecReload=/bin/kill -s HUP $MAINPID
+ExecStop=/bin/kill -s TERM $MAINPID
+PrivateTmp=true
+
+[Install]
+WantedBy=multi-user.target

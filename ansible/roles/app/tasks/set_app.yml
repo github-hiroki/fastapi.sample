@@ -1,0 +1,67 @@
+---
+- name: include vars for app
+  include_vars: app_vars.yml
+
+- name: get installed python versions on pyenv
+  shell:
+    cmd: . ~/.bashrc && pyenv versions
+  args:
+    executable: /bin/bash
+  register: check_result
+  changed_when: false
+
+- name: install python {{ app_python_version }} on pyenv
+  shell:
+    cmd: ". ~/.bashrc && pyenv install {{ app_python_version }}"
+  args:
+    executable: /bin/bash
+  when: check_result.stdout.find(app_python_version) == -1
+
+- name: create app directory
+  file:
+    path: "{{ app_root }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+
+- name: set Pipfile for app
+  copy:
+    src: app/Pipfile
+    dest: "{{ app_root }}/Pipfile"
+    owner: root
+    group: root
+    mode: "0644"
+  register: check_result
+  notify: restart fastapi-app service
+
+- name: install virtual env for app
+  shell:
+    cmd: . ~/.bashrc && pipenv install
+  args:
+    chdir: "{{ app_root }}"
+    executable: /bin/bash
+  when: check_result.changed
+
+- name: copy app
+  copy:
+    src: "app/{{ item }}"
+    dest: "{{ app_root }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - main.py
+    - guniconfig.py
+  notify: restart fastapi-app service
+
+- name: copy unit file for fastapi-app service
+  copy:
+    src: "{{ item }}"
+    dest: "/etc/systemd/system/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - fastapi-app.socket
+    - fastapi-app.service
