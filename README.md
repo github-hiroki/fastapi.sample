@@ -9,3 +9,7 @@ FastAPIなるものの存在を知ったのでサンプルを作ってみた。
 # pipenv install
 # pipenv run uvicorn main:app --reload
 ~~~
+
+## 参考
+
+- [FastAPI公式](https://fastapi.tiangolo.com)

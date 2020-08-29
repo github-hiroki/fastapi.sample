@@ -2,6 +2,8 @@
 
 仮想環境を作成してデプロイしてみる。
 
+クライアント > nginx > gunicorn > uvicorn > Webアプリ の構成。
+
 ## 仮想環境の作成
 
 ~~~console
