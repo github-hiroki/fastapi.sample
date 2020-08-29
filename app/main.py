@@ -60,7 +60,7 @@ def search_on_twitter(keyword: str):
 
 
 @app.get("/", response_class=HTMLResponse)
-async def root(request: Request):
+async def get_root(request: Request):
     return templates.TemplateResponse(
         'template.html',
         {'request': request},
@@ -68,7 +68,7 @@ async def root(request: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def root(request: Request, keyword: str = Form(...)):
+async def post_root(request: Request, keyword: str = Form(...)):
     contents = search_on_twitter(keyword)
     return templates.TemplateResponse(
         'template.html',
