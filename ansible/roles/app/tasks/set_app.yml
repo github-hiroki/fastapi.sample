@@ -25,6 +25,17 @@
     group: root
     mode: "0755"
 
+- name: create app templates directory
+  file:
+    path: "{{ app_root }}/{{ item }}"
+    state: directory
+    owner: root
+    group: root
+    mode: "0755"
+  loop:
+    - static
+    - templates
+
 - name: set Pipfile for app
   copy:
     src: app/Pipfile
@@ -54,6 +65,17 @@
     - main.py
     - guniconfig.py
   notify: restart fastapi-app service
+
+- name: copy app templates
+  copy:
+    src: "app/{{ item }}"
+    dest: "{{ app_root }}/{{ item }}"
+    owner: root
+    group: root
+    mode: "0644"
+  loop:
+    - static/styles.css
+    - templates/template.html
 
 - name: copy unit file for fastapi-app service
   copy:
