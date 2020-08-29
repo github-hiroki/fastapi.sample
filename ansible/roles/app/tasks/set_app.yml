@@ -64,6 +64,7 @@
   loop:
     - main.py
     - guniconfig.py
+    - .env
   notify: restart fastapi-app service
 
 - name: copy app templates
