@@ -9,8 +9,8 @@
     <h1>Keyword: {{ keyword }}</h1>
     <br>
     <form action="/" method="post">
-        <input type="text" name="keyword" value="{{ keyword }}" placeholder="keyword">
-        <button type="buttn" name="search", class="btn-flat-border">Search</button>
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="keyword" required>
+        <button type="buttn" name="search" class="btn-flat-border">Search</button>
         <br>
         Search up to
         <select name="count" id="count">

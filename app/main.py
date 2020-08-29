@@ -10,6 +10,7 @@ from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
 
+from typing import Optional
 import datetime
 import dotenv
 import os
@@ -89,9 +90,13 @@ async def get_root(request: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def post_root(request: Request, keyword: str = Form(...), count: int = Form(...)):
+async def post_root(request: Request, keyword: str = Form(""), count: int = Form(...)):
+    contents = []
     try:
-        contents = search_on_twitter(keyword, count)
+        if keyword:
+            contents = search_on_twitter(keyword, count)
+            pass
+        pass
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"{e}")
 
