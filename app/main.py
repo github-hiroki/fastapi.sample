@@ -1,6 +1,11 @@
 # Copyright 2020- hiroki.h Inc.
 
-from fastapi import FastAPI, Request, Form
+from fastapi import (
+    FastAPI,
+    Form,
+    HTTPException,
+    Request,
+)
 from fastapi.responses import HTMLResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.templating import Jinja2Templates
@@ -69,7 +74,11 @@ async def get_root(request: Request):
 
 @app.post("/", response_class=HTMLResponse)
 async def post_root(request: Request, keyword: str = Form(...)):
-    contents = search_on_twitter(keyword)
+    try:
+        contents = search_on_twitter(keyword)
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"{e}")
+
     return templates.TemplateResponse(
         'template.html',
         {'request': request, 'keyword': keyword, 'contents': contents},
