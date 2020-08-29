@@ -39,7 +39,7 @@ class TweetContent:
     pass
 
 
-def search_on_twitter(keyword: str):
+def search_on_twitter(keyword: str, count: int):
     """ハッシュタグで検索を行う。
     """
     # 環境変数ファイルを読み込む
@@ -56,12 +56,28 @@ def search_on_twitter(keyword: str):
     # APIを取得
     api = tweepy.API(auth)
 
-    # ツイートを検索(リツイートは除外する)
-    return [
-        TweetContent(tw)
-        for tw in tweepy.Cursor(api.search, q=keyword, result_type='recent').items(32)
-        if not(hasattr(tw, 'retweeted_status'))
-    ]
+    # ツイートを検索
+    contents = []
+    contents_length = None
+    last_id = None
+    while contents_length is None or contents_length != len(contents):
+        contents_length = len(contents)
+        for tw in tweepy.Cursor(api.search, q=keyword, result_type='recent', max_id=last_id).items(count):
+            # ツイートIDを更新
+            if last_id is not None and last_id == tw.id:
+                continue
+            last_id = tw.id
+            # リツイートは除外
+            if hasattr(tw, 'retweeted_status'):
+                continue
+            contents.append(TweetContent(tw))
+            if count <= len(contents):
+                break
+            pass
+        else:
+            continue
+        break
+    return contents
 
 
 @app.get("/", response_class=HTMLResponse)
@@ -73,15 +89,15 @@ async def get_root(request: Request):
 
 
 @app.post("/", response_class=HTMLResponse)
-async def post_root(request: Request, keyword: str = Form(...)):
+async def post_root(request: Request, keyword: str = Form(...), count: int = Form(...)):
     try:
-        contents = search_on_twitter(keyword)
+        contents = search_on_twitter(keyword, count)
     except Exception as e:
         raise HTTPException(status_code=400, detail=f"{e}")
 
     return templates.TemplateResponse(
         'template.html',
-        {'request': request, 'keyword': keyword, 'contents': contents},
+        {'request': request, 'keyword': keyword, 'count': count, 'contents': contents},
     )
 
 

@@ -3,13 +3,26 @@
     <title>Search Keyword on Twitter</title>
     <meta charset="UTF-8">
     <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+    <script src="//ajax.googleapis.com/ajax/libs/jquery/1.12.4/jquery.min.js"></script>
 </head>
 <body>
     <h1>Keyword: {{ keyword }}</h1>
     <br>
     <form action="/" method="post">
         <input type="text" name="keyword" value="{{ keyword }}" placeholder="keyword">
-        <input type="submit" name="submit" class="btn-flat-border" value="Search">
+        <button type="buttn" name="search", class="btn-flat-border">Search</button>
+        <br>
+        Search up to
+        <select name="count" id="count">
+            {% for n in [10, 20, 30, 40, 50] %}
+            {% if n == count %}
+            <option selected>{{ n }}</option>
+            {% else %}
+            <option>{{ n }}</option>
+            {% endif %}
+            {% endfor %}
+        </select>
+        of them.
     </form>
 
     {% if contents %}
@@ -20,15 +33,27 @@
             <th>日時</th>
             <th>内容</th>
         </tr>
-        {% for content in contents %} 
+        {% for content in contents %}
         <tr>
             <td>"{{ content.userid }}"</td>
             <td>"{{ content.username }}"</td>
             <td>"{{ content.created_at }}"</td>
             <td>"{{ content.text }}"</td>
         </tr>
-    {% endfor %}
-</table>
-{% endif %}
+        {% endfor %}
+    </table>
+    {% endif %}
 </body>
+
+<script>
+    $(function() {
+      $('button').click(function() {
+        $('form').submit();
+      });
+    });
+
+    $('#count').change(function() {
+        $('form').submit();
+    });
+</script>
 </html>
