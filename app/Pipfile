@@ -9,8 +9,13 @@ pytest = "*"
 pytest-asyncio = "*"
 
 [packages]
+aiofiles = "*"
 fastapi = "*"
 gunicorn = "*"
+jinja2 = "*"
+python-dotenv = "*"
+python-multipart = "*"
+tweepy = "*"
 uvicorn = "*"
 
 [requires]

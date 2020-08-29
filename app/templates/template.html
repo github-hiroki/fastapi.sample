@@ -1,0 +1,34 @@
+<html lang="ja">
+<head>
+    <title>Search Hashtag on Twitter</title>
+    <meta charset="UTF-8">
+    <link href="{{ url_for('static', path='/styles.css') }}" rel="stylesheet">
+</head>
+<body>
+    <h1>Keyword: {{ keyword }}</h1>
+    <br>
+    <form action="/" method="post">
+        <input type="text" name="keyword" value="{{ keyword }}" placeholder="keyword">
+        <input type="submit" name="submit" class="btn-flat-border" value="Search">
+    </form>
+
+    {% if contents %}
+    <table>
+        <tr>
+            <th>ユーザID</th>
+            <th>ユーザ名</th>
+            <th>日時</th>
+            <th>内容</th>
+        </tr>
+        {% for content in contents %} 
+        <tr>
+            <td>"{{ content.userid }}"</td>
+            <td>"{{ content.username }}"</td>
+            <td>"{{ content.created_at }}"</td>
+            <td>"{{ content.text }}"</td>
+        </tr>
+    {% endfor %}
+</table>
+{% endif %}
+</body>
+</html>
